@@ -23,12 +23,16 @@ Learn more about [Auto Run & Playbooks](https://docs.runmaestro.ai/autorun-playb
 
 ```
 maestro-playbooks/
-├── development/          # Development workflow playbooks
-├── testing/             # Testing and QA playbooks
-├── deployment/          # Deployment and CI/CD playbooks
-├── documentation/       # Documentation generation playbooks
-├── refactoring/         # Code refactoring playbooks
-└── templates/           # Playbook templates to customize
+└── playbooks/           # All playbooks organized by category
+    ├── development/     # Development workflow playbooks
+    │   ├── code-refactoring/
+    │   ├── documentation-coverage/
+    │   ├── performance-optimization/
+    │   ├── readme-accuracy/
+    │   ├── security-audit/
+    │   └── test-coverage/
+    └── research/        # Research and analysis playbooks
+        └── market-research/
 ```
 
 ## Getting Started
@@ -50,7 +54,22 @@ See the [Maestro Auto Run documentation](https://docs.runmaestro.ai/autorun-play
 
 ## Available Playbooks
 
-Coming soon - playbooks will be added as this repository develops*
+### Development
+
+- **[Code Refactoring](playbooks/development/code-refactoring/)** - Systematic code refactoring workflow
+- **[Documentation Coverage](playbooks/development/documentation-coverage/)** - Ensure comprehensive documentation
+- **[Performance Optimization](playbooks/development/performance-optimization/)** - Identify and fix performance issues
+- **[README Accuracy](playbooks/development/readme-accuracy/)** - Keep README files up-to-date
+- **[Security Audit](playbooks/development/security-audit/)** - Security vulnerability assessment
+- **[Test Coverage](playbooks/development/test-coverage/)** - Improve test coverage
+
+### Research
+
+- **[Market Research](playbooks/research/market-research/)** - Comprehensive market analysis workflow
+
+### General
+
+- **[Review Code](playbooks/review-code.md)** - Code review checklist
 
 ## Creating Your Own Playbooks
 
@@ -68,7 +87,7 @@ Playbooks are simple markdown files with checkboxes. Here's a basic template:
 - [ ] Subtask 2
 ```
 
-Check the `templates/` directory for more sophisticated examples and best practices.
+Check the existing playbooks in the `playbooks/` directory for more sophisticated examples and best practices.
 
 ## Contributing
 
