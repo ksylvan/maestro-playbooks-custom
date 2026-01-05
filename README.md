@@ -27,6 +27,7 @@ maestro-playbooks/
     ├── development/     # Development workflow playbooks
     │   ├── code-refactoring/
     │   ├── documentation-coverage/
+    │   ├── mobile_polish/
     │   ├── performance-optimization/
     │   ├── readme-accuracy/
     │   ├── security-audit/
@@ -58,6 +59,7 @@ See the [Maestro Auto Run documentation](https://docs.runmaestro.ai/autorun-play
 
 - **[Code Refactoring](playbooks/development/code-refactoring/)** - Systematic code refactoring workflow
 - **[Documentation Coverage](playbooks/development/documentation-coverage/)** - Ensure comprehensive documentation
+- **[Mobile Polish](playbooks/development/mobile_polish/)** - Make React websites mobile-friendly with responsive navigation, touch optimization, and performance improvements
 - **[Performance Optimization](playbooks/development/performance-optimization/)** - Identify and fix performance issues
 - **[README Accuracy](playbooks/development/readme-accuracy/)** - Keep README files up-to-date
 - **[Security Audit](playbooks/development/security-audit/)** - Security vulnerability assessment
