@@ -1,124 +1,723 @@
-# Maestro Playbooks
+# The Complete Maestro & Playbooks Guide
 
-A curated collection of playbooks for [Maestro](https://github.com/pedramamini/Maestro), the cross-platform desktop app for orchestrating AI coding agents.
+This document is your comprehensive reference for becoming an expert at Maestro and Maestro Playbooks. Read this thoroughly before working on any Maestro-related tasks.
 
-## About Maestro
+---
 
-[Maestro](https://runmaestro.ai/) is a powerful tool for managing multiple AI agents autonomously. Created by [Pedram Amini](https://github.com/pedramamini), it enables developers to run AI coding agents (Claude Code, OpenAI Codex, OpenCode) for extended periods on complex tasks with features like Auto Run, Git Worktrees, Group Chat, and mobile remote control.
+## Table of Contents
 
-This repository provides ready-to-use playbooks that leverage Maestro's Auto Run & Playbooks feature to automate common workflows and tasks.
+1. [What is Maestro?](#what-is-maestro)
+2. [Core Concepts](#core-concepts)
+3. [Auto Run & Playbooks Deep Dive](#auto-run--playbooks-deep-dive)
+4. [Playbook Architecture](#playbook-architecture)
+5. [Template Variables Reference](#template-variables-reference)
+6. [Creating Playbooks](#creating-playbooks)
+7. [Keyboard Shortcuts](#keyboard-shortcuts)
+8. [Slash Commands](#slash-commands)
+9. [Git Worktrees](#git-worktrees)
+10. [Group Chat](#group-chat)
+11. [CLI Reference](#cli-reference)
+12. [Context Management](#context-management)
+13. [Remote Access](#remote-access)
+14. [Best Practices](#best-practices)
 
-## What are Playbooks?
+---
 
-Playbooks are markdown-based checklists that Maestro's Auto Run feature processes through AI agents. Each task in a playbook gets its own AI session with clean conversation context, allowing for:
+## What is Maestro?
 
-- **Repeatable Workflows** - Define once, run many times
-- **Batch Processing** - Queue multiple tasks for autonomous execution
-- **Loop Support** - Run playbooks continuously or a set number of times
-- **Full History** - Track progress and results across all runs
+**Maestro** is a cross-platform desktop application for orchestrating multiple AI coding agents. Its core philosophy: *"Maestro hones fractured attention into focused intent."*
 
-Learn more about [Auto Run & Playbooks](https://docs.runmaestro.ai/autorun-playbooks) in the official Maestro documentation.
+### Key Capabilities
 
-## Repository Structure
+- **Multi-Agent Management**: Run unlimited agents in parallel (Claude Code, OpenAI Codex, OpenCode)
+- **Auto Run**: Batch-process markdown task documents through AI agents
+- **Playbooks**: Reusable, shareable workflow configurations
+- **Git Worktrees**: Parallel development on isolated branches
+- **Group Chat**: Coordinate multiple agents in a single conversation
+- **Keyboard-First Design**: Optimized for power users who live on the keyboard
 
-```
-maestro-playbooks/
-└── playbooks/           # All playbooks organized by category
-    ├── development/     # Development workflow playbooks
-    │   ├── code-refactoring/
-    │   ├── documentation-coverage/
-    │   ├── mobile_polish/
-    │   ├── performance-optimization/
-    │   ├── readme-accuracy/
-    │   ├── security-audit/
-    │   └── test-coverage/
-    └── research/        # Research and analysis playbooks
-        └── market-research/
-```
+### Supported AI Agents
 
-## Getting Started
+| Agent | Description |
+|-------|-------------|
+| Claude Code | Anthropic's AI coding assistant |
+| OpenAI Codex | OpenAI's coding agent |
+| OpenCode | Open-source AI coding assistant |
 
-### Prerequisites
+Future support planned for Aider, Gemini CLI, and Qwen3 Coder based on demand.
 
-- [Maestro](https://github.com/pedramamini/Maestro) installed and configured
-- At least one AI coding agent (Claude Code, OpenAI Codex, or OpenCode) installed and authenticated
+---
 
-### Using a Playbook
+## Core Concepts
 
-1. Clone this repository or download individual playbook files
-2. Open Maestro and navigate to your project
-3. Import or reference the playbook in Maestro's Auto Run feature
-4. Configure any playbook-specific variables or settings
-5. Start the Auto Run and monitor progress
+### Dual-Mode Sessions
 
-See the [Maestro Auto Run documentation](https://docs.runmaestro.ai/autorun-playbooks) for detailed instructions.
+Every agent has two terminals:
+- **AI Terminal**: Conversation with the AI agent
+- **Command Terminal**: Standard shell for running commands
 
-## Available Playbooks
+Switch between them with `Cmd+J` (Mac) / `Ctrl+J` (Windows/Linux).
 
-### Development
+### Session Isolation
 
-- **[Code Refactoring](playbooks/development/code-refactoring/)** - Systematic code refactoring workflow
-- **[Documentation Coverage](playbooks/development/documentation-coverage/)** - Ensure comprehensive documentation
-- **[Mobile Polish](playbooks/development/mobile_polish/)** - Make React websites mobile-friendly with responsive navigation, touch optimization, and performance improvements
-- **[Performance Optimization](playbooks/development/performance-optimization/)** - Identify and fix performance issues
-- **[README Accuracy](playbooks/development/readme-accuracy/)** - Keep README files up-to-date
-- **[Security Audit](playbooks/development/security-audit/)** - Security vulnerability assessment
-- **[Test Coverage](playbooks/development/test-coverage/)** - Improve test coverage
+Each Auto Run task executes in a **completely fresh AI session** with:
+- Clean context (no conversation history bleed)
+- Unique session ID
+- Predictable, reproducible behavior
 
-### Research
+This is critical for looping playbooks where each iteration must be independent.
 
-- **[Market Research](playbooks/research/market-research/)** - Comprehensive market analysis workflow
+### Message Queueing
 
-### General
+You can queue messages while the AI is busy. They're sent automatically when the agent becomes ready.
 
-- **[Review Code](playbooks/review-code.md)** - Code review checklist
+---
 
-## Creating Your Own Playbooks
+## Auto Run & Playbooks Deep Dive
 
-Playbooks are simple markdown files with checkboxes. Here's a basic template:
+### What is Auto Run?
+
+Auto Run is a **file-system-based document runner** that batch-processes markdown tasks using AI agents. Each document with checkboxes spawns a fresh AI session.
+
+### How It Works
+
+1. Navigate to Auto Run tab (`Cmd+Shift+1`)
+2. Select folder containing markdown task documents
+3. Configure documents, order, and execution options
+4. Click Run to start batch processing
+
+### Document Structure
+
+Documents are markdown files with checkbox tasks:
 
 ```markdown
-# My Custom Playbook
+# Task Document Title
 
-## Task 1: Description
-- [ ] Subtask 1
-- [ ] Subtask 2
+## Context
+- **Agent:** {{AGENT_NAME}}
+- **Project:** {{AGENT_PATH}}
+- **Loop:** {{LOOP_NUMBER}}
 
-## Task 2: Description
-- [ ] Subtask 1
-- [ ] Subtask 2
+## Tasks
+
+- [ ] First task to complete
+- [ ] Second task to complete
+- [ ] Third task to complete
 ```
 
-Check the existing playbooks in the `playbooks/` directory for more sophisticated examples and best practices.
+Use `Cmd+L` / `Ctrl+L` to quickly insert checkboxes.
 
-## Contributing
+### Key Configuration Options
 
-Contributions are welcome! If you've created a useful playbook:
+| Option | Description |
+|--------|-------------|
+| **Reset on Completion** | Creates working copies in `Runs/` subfolder instead of modifying originals. Generates timestamped logs. |
+| **Loop Mode** | Cycles back to first document after completing the last |
+| **Max Loops** | Prevents runaway iterations |
+| **Duplicate** | Add same document multiple times to the queue |
 
-1. Fork this repository
-2. Add your playbook to the appropriate directory
-3. Update the README with a description of your playbook
-4. Submit a pull request
+### What Are Playbooks?
 
-Please ensure your playbooks:
+Playbooks are **saved Auto Run configurations** that automate multi-step workflows. Each playbook defines:
+- A sequence of markdown documents
+- Execution settings (loop mode, max loops)
+- Reset behavior per document
+- Optional custom agent prompts
 
-- Are well-documented with clear task descriptions
-- Include any necessary setup instructions or prerequisites
-- Follow the existing directory structure
-- Are tested with Maestro's Auto Run feature
+### Playbook Exchange
 
-## Resources
+Community repository of pre-built playbooks accessible via:
+- Quick Actions (`Cmd+K`) > "Playbook Exchange"
+- Exchange button in Auto Run panel
 
-- **Maestro**: [GitHub Repository](https://github.com/pedramamini/Maestro) | [Website](https://runmaestro.ai/)
-- **Documentation**: [docs.runmaestro.ai](https://docs.runmaestro.ai)
-- **Discord Community**: [Join the conversation](https://discord.gg/SVSRy593)
-- **Auto Run Guide**: [Using Playbooks](https://docs.runmaestro.ai/autorun-playbooks)
+---
 
-## License
+## Playbook Architecture
 
-This repository is licensed under the [AGPL-3.0 License](LICENSE), the same license as Maestro itself.
+### The 5-Document Chain Pattern
 
-## Acknowledgments
+Every playbook follows this structure:
 
-- [Pedram Amini](https://github.com/pedramamini) for creating Maestro
-- The Maestro community for inspiration and feedback
+```
+0_INITIALIZE.md  -> (Optional) One-time setup, runs once
+1_ANALYZE.md     -> Survey target, identify what to investigate
+2_FIND_*.md      -> Find specific issues/gaps/entities
+3_EVALUATE.md    -> Rate candidates by priority criteria
+4_IMPLEMENT.md   -> Execute ONE item per loop iteration
+5_PROGRESS.md    -> Loop gate: resets 1-4 if work remains, exits if done
+```
+
+### Loop Control Mechanism
+
+| Document | Reset Setting | Behavior |
+|----------|--------------|----------|
+| 0_INITIALIZE.md | `Reset: OFF` | Runs once at start |
+| 1-4 Documents | `Reset: OFF` | Don't auto-reset when completed |
+| 5_PROGRESS.md | `Reset: ON` | Controls the loop by conditionally resetting 1-4 |
+
+**The key insight**: Document 5 is the **progress gate**. It checks if work remains and resets documents 1-4 to continue, or leaves them alone to exit.
+
+### Exit Conditions
+
+Exit when ALL of these are true:
+1. No `PENDING` items remain in the plan
+2. All tactics/discovery methods are exhausted
+3. Or: max loops reached
+
+### Design Philosophy: Context Engineering
+
+**Playbook design IS context engineering.** The core principle is **progressive disclosure**:
+
+> Reveal information incrementally, not all at once.
+
+AI agents perform best with focused, relevant context. Playbooks achieve this through:
+
+1. **Staged discovery**: Each document produces artifacts for the next stage
+2. **Front-loaded work**: Token-heavy discovery happens upfront in documents 1-3
+3. **Cheap execution**: Document 4 reads pre-computed context, executes one item
+4. **Self-contained iterations**: Each loop is discover → plan → execute → check
+
+### Working Files
+
+Each loop creates numbered working files:
+
+| File | Purpose |
+|------|---------|
+| `LOOP_N_GAME_PLAN.md` | Investigation tactics and strategy |
+| `LOOP_N_CANDIDATES.md` | Raw findings from discovery |
+| `LOOP_N_PLAN.md` | Evaluated items with priority ratings |
+| `*_LOG.md` | Cumulative log across all loops |
+
+### Status Values
+
+Items in plan files use these statuses:
+
+| Status | Meaning |
+|--------|---------|
+| `PENDING` | Ready for automated processing |
+| `IMPLEMENTED` / `RESEARCHED` | Completed in current loop |
+| `WON'T DO` / `SKIP` | Intentionally skipped |
+| `PENDING - MANUAL REVIEW` | Requires human decision |
+
+---
+
+## Template Variables Reference
+
+Maestro substitutes these variables at runtime:
+
+### Agent Variables
+
+| Variable | Description |
+|----------|-------------|
+| `{{AGENT_NAME}}` | Agent identifier |
+| `{{AGENT_PATH}}` | Full project directory path |
+| `{{AGENT_GROUP}}` | Group assignment (if applicable) |
+| `{{AGENT_SESSION_ID}}` | Conversation continuity identifier |
+| `{{TAB_NAME}}` | Custom tab label (alias: `{{SESSION_NAME}}`) |
+| `{{TOOL_TYPE}}` | Agent type: `claude-code`, `codex`, `opencode` |
+
+### Path Variables
+
+| Variable | Description |
+|----------|-------------|
+| `{{CWD}}` | Present working directory |
+| `{{AUTORUN_FOLDER}}` | Auto Run documents directory |
+
+### Auto Run Variables
+
+| Variable | Description |
+|----------|-------------|
+| `{{DOCUMENT_NAME}}` | Current document title (no extension) |
+| `{{DOCUMENT_PATH}}` | Complete document location |
+| `{{LOOP_NUMBER}}` | Iteration count (starts at 1) |
+
+### Date/Time Variables
+
+| Variable | Description |
+|----------|-------------|
+| `{{DATE}}` | Full date |
+| `{{TIME}}` | Full time |
+| `{{DATETIME}}` | Combined date and time |
+| `{{TIMESTAMP}}` | Unix milliseconds |
+| `{{DATE_SHORT}}` | Abbreviated date |
+| `{{TIME_SHORT}}` | Abbreviated time |
+| `{{YEAR}}`, `{{MONTH}}`, `{{DAY}}` | Individual components |
+| `{{WEEKDAY}}` | Day of week |
+
+### Git Variables
+
+| Variable | Description |
+|----------|-------------|
+| `{{GIT_BRANCH}}` | Current branch name |
+| `{{IS_GIT_REPO}}` | Boolean status |
+
+### Context Variables
+
+| Variable | Description |
+|----------|-------------|
+| `{{CONTEXT_USAGE}}` | Token window percentage |
+
+---
+
+## Creating Playbooks
+
+### Folder Structure
+
+```
+Category/
+└── YourPlaybook/
+    ├── README.md           # Required: Description shown in exchange
+    ├── 0_INITIALIZE.md     # Optional: One-time setup
+    ├── 1_ANALYZE.md        # Survey and identify targets
+    ├── 2_FIND_*.md         # Find specific issues/gaps
+    ├── 3_EVALUATE.md       # Rate candidates by priority
+    ├── 4_IMPLEMENT.md      # Execute one item per loop
+    ├── 5_PROGRESS.md       # Loop gate: continue or exit
+    ├── Agent-Prompt.md     # Optional: Custom prompt
+    └── assets/             # Optional: Config files, scripts, etc.
+```
+
+### Required Context Block
+
+Every document must include:
+
+```markdown
+# Document Title
+
+## Context
+- **Playbook:** Your Playbook Name
+- **Agent:** {{AGENT_NAME}}
+- **Project:** {{AGENT_PATH}}
+- **Loop:** {{LOOP_NUMBER}}
+- **Date:** {{DATE}}
+- **Working Folder:** {{AUTORUN_FOLDER}}
+```
+
+### Document Guidelines
+
+1. **Use checkbox format**: `- [ ]` for Auto Run to process
+2. **Be specific**: Clear, actionable instructions
+3. **One item per loop**: Document 4 should implement ONE item, not batch
+4. **Clear exit conditions**: Document 5 must have unambiguous logic
+
+### Assets Folder
+
+Bundle non-markdown files with your playbook:
+
+```markdown
+- [ ] Read the config from `{{AUTORUN_FOLDER}}/assets/config.yaml`
+```
+
+Use cases:
+- Configuration templates (YAML, JSON, TOML)
+- Dockerfiles
+- Helper scripts
+- Schema definitions
+
+### manifest.json Entry
+
+```json
+{
+  "id": "category-subcategory",
+  "title": "Your Playbook Title",
+  "description": "One or two sentences describing the playbook.",
+  "category": "Category",
+  "subcategory": "Subcategory",
+  "author": "Your Name",
+  "authorLink": "https://your-website.com",
+  "tags": ["relevant", "keywords"],
+  "lastUpdated": "YYYY-MM-DD",
+  "path": "Category/Subcategory",
+  "documents": [
+    { "filename": "1_ANALYZE", "resetOnCompletion": false },
+    { "filename": "2_FIND_ISSUES", "resetOnCompletion": false },
+    { "filename": "3_EVALUATE", "resetOnCompletion": false },
+    { "filename": "4_IMPLEMENT", "resetOnCompletion": false },
+    { "filename": "5_PROGRESS", "resetOnCompletion": true }
+  ],
+  "loopEnabled": true,
+  "maxLoops": null,
+  "prompt": null
+}
+```
+
+**Important**: Only document 5 should have `resetOnCompletion: true`.
+
+---
+
+## Keyboard Shortcuts
+
+### Essential Shortcuts
+
+| Action | macOS | Windows/Linux |
+|--------|-------|---------------|
+| Quick Actions | `Cmd+K` | `Ctrl+K` |
+| New Agent | `Cmd+N` | `Ctrl+N` |
+| Switch AI/Terminal | `Cmd+J` | `Ctrl+J` |
+| Previous Agent | `Cmd+[` | `Ctrl+[` |
+| Next Agent | `Cmd+]` | `Ctrl+]` |
+| Toggle Sidebar | `Cmd+B` | `Ctrl+B` |
+| All Shortcuts | `Cmd+/` | `Ctrl+/` |
+
+### Navigation
+
+| Action | macOS | Windows/Linux |
+|--------|-------|---------------|
+| Toggle Right Panel | `Cmd+\` | `Ctrl+\` |
+| Jump to Agent 1-9 | `Opt+Cmd+NUMBER` | `Alt+Ctrl+NUMBER` |
+| Open Settings | `Cmd+,` | `Ctrl+,` |
+
+### Agent Management
+
+| Action | macOS | Windows/Linux |
+|--------|-------|---------------|
+| Kill Agent | `Cmd+Shift+Backspace` | `Ctrl+Shift+Backspace` |
+| Move Agent to Group | `Cmd+Shift+M` | `Ctrl+Shift+M` |
+
+### Tab Management
+
+| Action | macOS | Windows/Linux |
+|--------|-------|---------------|
+| New Tab | `Cmd+T` | `Ctrl+T` |
+| Close Tab | `Cmd+W` | `Ctrl+W` |
+| Reopen Tab | `Cmd+Shift+T` | `Ctrl+Shift+T` |
+| Next/Previous Tab | `Cmd+Shift+]` / `[` | `Ctrl+Shift+]` / `[` |
+
+### File Operations
+
+| Action | macOS | Windows/Linux |
+|--------|-------|---------------|
+| Go to File | `Cmd+G` | `Ctrl+G` |
+| Files Tab | `Cmd+Shift+F` | `Ctrl+Shift+F` |
+| History Tab | `Cmd+Shift+H` | `Ctrl+Shift+H` |
+| Document Graph | `Cmd+Shift+G` | `Ctrl+Shift+G` |
+| Usage Dashboard | `Opt+Cmd+U` | `Alt+Ctrl+U` |
+
+### AI Terminal
+
+| Action | macOS | Windows/Linux |
+|--------|-------|---------------|
+| Toggle History | `Cmd+S` | `Ctrl+S` |
+| Toggle Read-Only | `Cmd+R` | `Ctrl+R` |
+| Toggle Thinking | `Cmd+Shift+K` | `Ctrl+Shift+K` |
+| Insert Checkbox | `Cmd+L` | `Ctrl+L` |
+
+---
+
+## Slash Commands
+
+### Using Slash Commands
+
+Type `/` in the input area, then navigate with arrow keys and select with `Tab` or `Enter`.
+
+### Creating Custom Commands
+
+Settings > Custom AI Commands. Each command has:
+- **Trigger**: e.g., `/deploy`
+- **Prompt**: AI-directed prompt with template variables
+
+Example:
+```
+/standup → "It's {{WEEKDAY}}, {{DATE}}. I'm on branch {{GIT_BRANCH}} at {{AGENT_PATH}}."
+```
+
+### Built-In Command Suites
+
+**Spec-Kit Commands** (GitHub's structured methodology):
+- `/speckit.constitution` - Project constitution
+- `/speckit.specify` - Specification creation
+- `/speckit.clarify` - Requirement clarification
+- `/speckit.plan` - Implementation planning
+- `/speckit.tasks` - Task breakdown
+- `/speckit.implement` - Implementation
+
+**OpenSpec Commands** (spec-driven changes):
+- `/openspec.proposal` - Change proposal with spec deltas
+- `/openspec.apply` - Apply approved proposals
+- `/openspec.archive` - Post-deployment archival
+- `/openspec.implement` - Auto Run document generation
+
+### Claude Code Commands in Auto Run
+
+**Supported in Batch Mode**:
+`/compact`, `/context`, `/cost`, `/init`, `/pr-comments`, `/release-notes`, `/review`, `/security-review`, plus custom plugin commands
+
+**Interactive-Only (Not Supported)**:
+`/mcp`, `/help`, `/clear`, `/config`, `/model`, `/permissions`, `/memory`, `/rewind`, `/vim`, `/doctor`, `/login`, `/logout`, `/bug`
+
+---
+
+## Git Worktrees
+
+### What Are Git Worktrees?
+
+Git worktrees enable parallel development by running AI agents on separate branches in isolated directories. No conflicts between parallel work streams.
+
+### Creating a Worktree Sub-Agent
+
+1. Hover over an agent in a git repository
+2. Click the git branch indicator
+3. Select "Create Worktree Sub-Agent"
+4. Configure:
+   - **Worktree Directory**: Base folder (outside main repo recommended)
+   - **Branch Name**: Becomes the subdirectory name
+
+### Best Practice
+
+> Configure the worktree directory outside your main repository (e.g., `~/Projects/Maestro-WorkTrees/`). This keeps worktrees organized and prevents them from appearing in your main repo's file tree.
+
+### Use Cases
+
+- **Background Auto Run**: Execute automated tasks while working interactively
+- **Feature Branches**: Dedicated agents for each feature
+- **Code Review**: Review PRs without branch switching
+- **Parallel Experiments**: Test multiple approaches simultaneously
+
+### Pull Request Workflow
+
+1. Complete work in worktree
+2. Right-click agent or use `Cmd+K`
+3. Create PR (requires `gh` CLI installed and authenticated)
+
+---
+
+## Group Chat
+
+### What is Group Chat?
+
+Coordinate multiple AI agents in a single conversation. A **moderator AI** orchestrates discussions, routing questions to appropriate agents and synthesizing responses.
+
+### How It Works
+
+1. Create Group Chat from sidebar
+2. Add participants with @mentions: `@Frontend`, `@Backend`
+3. Send your question
+4. Moderator routes to relevant agents
+5. Each agent responds in their project context
+6. Moderator synthesizes into coherent answer
+
+### Moderator Responsibilities
+
+- Direct answers for simple questions
+- Delegation to appropriate agents
+- Follow-up until complete
+- Synthesis of multiple perspectives
+
+### Use Cases
+
+- Cross-project architecture discussions
+- Comparative analysis across repositories
+- Knowledge synthesis from specialized agents
+- Cross-machine collaboration via SSH
+
+---
+
+## CLI Reference
+
+### Installation
+
+**macOS:**
+```bash
+printf '#!/bin/bash\nnode "/Applications/Maestro.app/Contents/Resources/maestro-cli.js" "$@"\n' | sudo tee /usr/local/bin/maestro-cli && sudo chmod +x /usr/local/bin/maestro-cli
+```
+
+**Linux:**
+```bash
+printf '#!/bin/bash\nnode "/opt/Maestro/resources/maestro-cli.js" "$@"\n' | sudo tee /usr/local/bin/maestro-cli && sudo chmod +x /usr/local/bin/maestro-cli
+```
+
+### Core Commands
+
+| Command | Purpose |
+|---------|---------|
+| `maestro-cli list groups` | Display all groups |
+| `maestro-cli list agents` | Show all agents |
+| `maestro-cli list agents --group <id>` | Filter agents by group |
+| `maestro-cli show agent <id>` | Display agent details |
+| `maestro-cli list playbooks` | List all playbooks |
+| `maestro-cli show playbook <id>` | Display playbook details |
+| `maestro-cli playbook <id>` | Execute a playbook |
+
+### Playbook Execution Options
+
+| Flag | Description |
+|------|-------------|
+| `--dry-run` | Preview without executing |
+| `--no-history` | Execute without recording |
+| `--wait` | Wait for agent if busy |
+| `--verbose` | Detailed output |
+| `--debug` | Debug mode |
+| `--json` | JSONL output for scripting |
+
+### Scheduling with Cron
+
+```bash
+0 * * * * /usr/local/bin/maestro-cli playbook <id> --json >> /var/log/maestro.jsonl 2>&1
+```
+
+---
+
+## Context Management
+
+### Context Thresholds
+
+| Usage | Indicator |
+|-------|-----------|
+| <60% | Normal |
+| 60% | Yellow warning |
+| 80% | Red warning |
+
+### Context Compaction
+
+When approaching limits, compact context to preserve:
+- Key decisions
+- Code modifications
+- Technical constraints
+- Task state
+
+**Eligibility**: ≥25% context usage or ≥10,000 tokens
+
+**Process**:
+- Small conversations (<50k tokens): Single-pass summarization
+- Large conversations (≥50k tokens): Chunked processing with consolidation
+
+### Session Merging
+
+Combine context from multiple tabs/sessions:
+- Right-click menu > Merge sessions
+- Modal shows token estimates
+- Optional "clean context" to remove duplicates
+
+### Sending to Another Agent
+
+Transfer context to different AI agents:
+- Useful for perspective shifts
+- Accessing different tool sets
+- Working on different project directories
+
+---
+
+## Remote Access
+
+### Built-in Web Server
+
+Runs on random port with auto-generated security token. Access via QR code from mobile devices.
+
+### Local Network Access
+
+Click "OFFLINE" button in header to:
+- Show QR code
+- Copy secure URL
+- Connect from any device on same network
+
+### Cloudflare Tunnels
+
+For remote access outside local network:
+1. Install `cloudflared` CLI
+2. Toggle to remote mode in QR overlay
+3. No time limits, no account required
+
+### Mobile Interface Features
+
+- Real-time session monitoring
+- Light/dark mode
+- Automatic reconnection
+- Offline command queuing
+- Swipe gestures
+- Quick action menus
+
+---
+
+## Best Practices
+
+### Running Playbooks
+
+1. **Start without loop mode**: Review what it finds before automation
+2. **Set max loops**: Prevent runaway iterations
+3. **Review-first approach**:
+   - Run once with Loop Mode OFF
+   - Review generated plan files
+   - Adjust statuses if needed
+   - Run again with Loop Mode ON
+
+### Designing Playbooks
+
+1. **Context is king**: Each document should answer "What is the minimum context needed?"
+2. **Front-load discovery**: Token-heavy work in documents 1-3
+3. **One item per loop**: Document 4 implements ONE item for clean git commits
+4. **Clear exit conditions**: Document 5 must have unambiguous logic
+5. **Use template variables**: Make playbooks portable across projects
+
+### General Workflow
+
+1. **Commit frequently**: Each loop iteration is a good commit point
+2. **Run tests after changes**: Verify nothing broke
+3. **Compact context proactively**: Don't wait for warnings
+4. **Use worktrees for parallel work**: Avoid conflicts
+5. **Descriptive agent names**: Makes Group Chat routing clearer
+
+### Session Hook Tip
+
+Use `MAESTRO_SESSION_RESUMED` to skip agent hooks on resumed sessions:
+
+```bash
+[ "$MAESTRO_SESSION_RESUMED" = "1" ] && exit 0
+# ... hook logic for new sessions only
+```
+
+---
+
+## Available Development Playbooks
+
+| Playbook | Purpose | Exit Condition |
+|----------|---------|----------------|
+| `Development/Performance/` | Find and fix performance issues | No PENDING items remain |
+| `Development/Security/` | Audit and remediate vulnerabilities | No CRITICAL/HIGH severity issues |
+| `Development/Refactor/` | Simplify code, eliminate duplication | No LOW risk + HIGH benefit items |
+| `Development/Documentation/` | Achieve 90% doc coverage | Coverage ≥90% |
+| `Development/Testing/` | Achieve 80% test coverage | Coverage ≥80% |
+| `Development/Usage/` | Update README to match features | No CRITICAL/HIGH gaps |
+| `Development/Mobile-Polish/` | Transform desktop sites for mobile | All mobile issues resolved |
+
+## Research Playbooks
+
+| Playbook | Purpose | Notes |
+|----------|---------|-------|
+| `Research/Market/` | Build Obsidian-style knowledge vault | Requires custom Agent-Prompt.md configuration |
+
+---
+
+## Quick Reference Links
+
+- **Maestro Docs**: <https://docs.runmaestro.ai/>
+- **Maestro GitHub**: <https://github.com/pedramamini/Maestro>
+- **Playbooks GitHub**: <https://github.com/pedramamini/Maestro-Playbooks>
+- **Discord**: <https://runmaestro.ai/discord>
+
+---
+
+## Example: Document 5 (Progress Gate) Logic
+
+This is the critical loop control document. Here's the decision logic:
+
+```
+IF plan file doesn't exist:
+    → Do NOT reset (pipeline just started)
+
+ELSE IF items with status "PENDING" exist:
+    → Reset documents 1-4 (continue to implement)
+
+ELSE IF candidates file does NOT contain "ALL_TACTICS_EXHAUSTED":
+    → Reset documents 1-4 (continue to discover)
+
+ELSE:
+    → Do NOT reset (exit - all done)
+```
+
+**Key insight**: The loop continues if EITHER:
+1. There are PENDING items to implement, OR
+2. There are still tactics to execute
+
+---
+
+*This guide was compiled from the official Maestro documentation, GitHub repositories, and CONTRIBUTING.md. Keep it updated as Maestro evolves.*
