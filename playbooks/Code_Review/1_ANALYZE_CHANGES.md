@@ -14,9 +14,9 @@ Understand the scope and context of the pull request before diving into detailed
 
 ## Pull Request Information
 
-**Pull Request**: https://github.com/USER/PROJECT/pull/XXXX
+**Pull Request**: <https://github.com/USER/PROJECT/pull/XXXX>
 
-*(Update the URL above before running this playbook)*
+NOTE: *(Update the URL above before running this playbook)*
 
 ## Tasks
 
