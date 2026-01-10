@@ -1,0 +1,69 @@
+[
+  {
+    "id": "afg-website-tracking-feature",
+    "title": "AFG Activity Tracking with Auto-Migration",
+    "description": "Adds comprehensive user activity tracking (last_login, last_activity) to the AFG website with a Django/Rails-style auto-migration system that runs on every deployment.",
+    "category": "Development",
+    "subcategory": "Features",
+    "author": "Kayvan Sylvan",
+    "authorLink": "https://www.sylvan.com",
+    "tags": ["activity-tracking", "migrations", "database", "next.js", "postgresql", "admin-ui"],
+    "lastUpdated": "2026-01-09",
+    "path": "AFG_Website_Tracking_Feature",
+    "documents": [
+      { "filename": "1_MIGRATION_INFRASTRUCTURE", "resetOnCompletion": false },
+      { "filename": "2_UPDATE_DATABASE", "resetOnCompletion": false },
+      { "filename": "3_ADD_QUERIES", "resetOnCompletion": false },
+      { "filename": "4_TRACK_ACTIVITY", "resetOnCompletion": false },
+      { "filename": "5_ADMIN_UI", "resetOnCompletion": false },
+      { "filename": "6_USER_UI", "resetOnCompletion": false }
+    ],
+    "loopEnabled": false,
+    "maxLoops": null,
+    "prompt": null
+  },
+  {
+    "id": "code-review",
+    "title": "Code Review",
+    "description": "Comprehensive pull request code review covering correctness, security, performance, test coverage, and documentation.",
+    "category": "Development",
+    "subcategory": "Review",
+    "author": "Kayvan Sylvan",
+    "authorLink": "https://www.sylvan.com",
+    "tags": ["code-review", "pull-request", "security", "testing", "best-practices"],
+    "lastUpdated": "2026-01-09",
+    "path": "Code_Review",
+    "documents": [
+      { "filename": "1_ANALYZE_CHANGES", "resetOnCompletion": false },
+      { "filename": "2_REVIEW_CODE", "resetOnCompletion": false },
+      { "filename": "3_CHECK_SECURITY", "resetOnCompletion": false },
+      { "filename": "4_VERIFY_TESTS", "resetOnCompletion": false },
+      { "filename": "5_SUMMARIZE", "resetOnCompletion": false }
+    ],
+    "loopEnabled": false,
+    "maxLoops": null,
+    "prompt": null
+  },
+  {
+    "id": "best-pr",
+    "title": "Best PR Comparison",
+    "description": "Objectively compares two competing PRs implementing the same feature using weighted criteria, determines a winner, and extracts valuable insights from the runner-up.",
+    "category": "Development",
+    "subcategory": "Review",
+    "author": "Kayvan Sylvan",
+    "authorLink": "https://www.sylvan.com",
+    "tags": ["pr-comparison", "code-review", "decision-making", "weighted-scoring"],
+    "lastUpdated": "2026-01-09",
+    "path": "Best_PR",
+    "documents": [
+      { "filename": "1_ESTABLISH_CONTEXT", "resetOnCompletion": false },
+      { "filename": "2_EVALUATE_PR_A", "resetOnCompletion": false },
+      { "filename": "3_EVALUATE_PR_B", "resetOnCompletion": false },
+      { "filename": "4_COMPARE", "resetOnCompletion": false },
+      { "filename": "5_SYNTHESIZE", "resetOnCompletion": false }
+    ],
+    "loopEnabled": false,
+    "maxLoops": null,
+    "prompt": null
+  }
+]

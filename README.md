@@ -20,6 +20,7 @@ This document is your comprehensive reference for becoming an expert at Maestro 
 12. [Context Management](#context-management)
 13. [Remote Access](#remote-access)
 14. [Best Practices](#best-practices)
+15. [Example Playbooks in This Repository](#example-playbooks-in-this-repository)
 
 ---
 
@@ -684,6 +685,82 @@ Use `MAESTRO_SESSION_RESUMED` to skip agent hooks on resumed sessions:
 | Playbook | Purpose | Notes |
 |----------|---------|-------|
 | `Research/Market/` | Build Obsidian-style knowledge vault | Requires custom Agent-Prompt.md configuration |
+
+---
+
+## Example Playbooks in This Repository
+
+This repository includes three example playbooks demonstrating different patterns:
+
+### Linear Feature Implementation: AFG Activity Tracking
+
+**Path**: `playbooks/AFG_Website_Tracking_Feature/`
+
+A 6-document sequential playbook that implements a complete feature from start to finish. Demonstrates the **linear pattern** (no looping) for feature implementation.
+
+| Document | Purpose |
+|----------|---------|
+| `1_MIGRATION_INFRASTRUCTURE` | Create Django/Rails-style migration runner |
+| `2_UPDATE_DATABASE` | Schema, migration file, TypeScript types |
+| `3_ADD_QUERIES` | Database query functions |
+| `4_TRACK_ACTIVITY` | Auth event handler and activity tracking |
+| `5_ADMIN_UI` | Admin activity page and dashboard |
+| `6_USER_UI` | User-facing profile and home page updates |
+
+**Key characteristics:**
+- `loopEnabled: false` — runs once, sequentially
+- All documents have `resetOnCompletion: false`
+- Each document builds on the previous one
+- Includes migration infrastructure for zero-downtime deployments
+
+### Linear Code Review: Code Review
+
+**Path**: `playbooks/Code_Review/`
+
+A 5-document sequential playbook for comprehensive pull request reviews. Demonstrates a **multi-pass review pattern** covering different aspects of code quality.
+
+| Document | Purpose |
+|----------|---------|
+| `1_ANALYZE_CHANGES` | Understand PR scope, categorize files |
+| `2_REVIEW_CODE` | Correctness, best practices, error handling |
+| `3_CHECK_SECURITY` | OWASP Top 10, secrets, auth/authz |
+| `4_VERIFY_TESTS` | Test coverage gaps, test quality |
+| `5_SUMMARIZE` | Compile findings, generate verdict |
+
+**Key characteristics:**
+- `loopEnabled: false` — single-pass review
+- Generates working files: `REVIEW_SCOPE.md`, `CODE_ISSUES.md`, `SECURITY_ISSUES.md`, `TEST_GAPS.md`, `REVIEW_SUMMARY.md`
+- Outputs ready-to-post PR comment
+- Update PR URL in Document 1 before running
+
+### Comparative Analysis: Best PR Comparison
+
+**Path**: `playbooks/Best_PR/`
+
+A 5-document playbook that objectively compares two competing PRs implementing the same feature. Uses **weighted scoring** to determine a winner and extracts valuable insights from the runner-up.
+
+| Document | Purpose |
+|----------|---------|
+| `1_ESTABLISH_CONTEXT` | Fetch both PRs, understand feature scope |
+| `2_EVALUATE_PR_A` | Score PR-A against weighted criteria |
+| `3_EVALUATE_PR_B` | Score PR-B against same criteria |
+| `4_COMPARE` | Side-by-side matrix, determine winner |
+| `5_SYNTHESIZE` | Final recommendation + cross-pollination |
+
+**Key characteristics:**
+- `loopEnabled: false` — single comparison pass
+- Weighted scoring: Security/Correctness (3x), Performance/Tests (2x), Quality/Docs/Size (1x)
+- Generates: `EVALUATION_CRITERIA.md`, `PR_A_EVALUATION.md`, `PR_B_EVALUATION.md`, `COMPARISON_MATRIX.md`, `BEST_PR_SUMMARY.md`
+- Supports "Too Close to Call" outcome when scores are within 5 points
+- Extracts "gems" from runner-up for cross-pollination
+
+### When to Use Each Pattern
+
+| Pattern | Use When | Example |
+|---------|----------|---------|
+| **Linear (no loop)** | Sequential steps that build on each other | Feature implementation, migrations |
+| **Comparative** | Evaluating multiple options against criteria | PR comparison, tech stack evaluation |
+| **Looping (5-doc chain)** | Iterative discovery and implementation | Bug fixing, refactoring, documentation gaps |
 
 ---
 
