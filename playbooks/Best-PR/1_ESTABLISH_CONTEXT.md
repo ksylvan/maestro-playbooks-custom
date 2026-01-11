@@ -14,11 +14,11 @@ Understand the feature both PRs implement, fetch their diffs, and establish the 
 
 ## Pull Request Information
 
-**PR-A**: https://github.com/OWNER/REPO/pull/XXX
+**PR-A**: <https://github.com/OWNER/REPO/pull/XXX>
 
-**PR-B**: https://github.com/OWNER/REPO/pull/YYY
+**PR-B**: <https://github.com/OWNER/REPO/pull/YYY>
 
-*(Update both URLs above before running this playbook)*
+Note: Update both URLs above before running this playbook
 
 ## Tasks
 

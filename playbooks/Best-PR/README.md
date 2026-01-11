@@ -13,6 +13,10 @@ When two developers create different implementations for the same feature, this 
 - **Cross-Pollination**: Extracts "gems" from the runner-up PR
 - **Actionable Output**: Provides next steps to improve the winning PR
 
+### Prerequisites
+
+This Playbook works best if you have the `gh` CLI installed and authenticated.
+
 ## Scoring System
 
 ### Scale

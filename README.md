@@ -735,7 +735,9 @@ A 5-document sequential playbook for comprehensive pull request reviews. Demonst
 
 ### Comparative Analysis: Best PR Comparison
 
-**Path**: `playbooks/Best_PR/`
+> Note: This playbook is now in [Maestro](https://github.com/pedramamini/Maestro-Playbooks) as of 1/10/2026; See <https://github.com/pedramamini/Maestro-Playbooks/pull/9>.
+
+**Path**: `playbooks/Best-PR/`
 
 A 5-document playbook that objectively compares two competing PRs implementing the same feature. Uses **weighted scoring** to determine a winner and extracts valuable insights from the runner-up.
 

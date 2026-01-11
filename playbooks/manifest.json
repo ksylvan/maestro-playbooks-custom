@@ -54,7 +54,7 @@
     "authorLink": "https://www.sylvan.com",
     "tags": ["pr-comparison", "code-review", "decision-making", "weighted-scoring"],
     "lastUpdated": "2026-01-09",
-    "path": "Best_PR",
+    "path": "Best-PR",
     "documents": [
       { "filename": "1_ESTABLISH_CONTEXT", "resetOnCompletion": false },
       { "filename": "2_EVALUATE_PR_A", "resetOnCompletion": false },
