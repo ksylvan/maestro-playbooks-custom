@@ -1,3 +1,6 @@
 {
-  "markdownlint.ignore": ["LICENSE"]
+	"markdownlint.ignore": ["LICENSE"],
+	"[json]": {
+		"editor.formatOnSave": false
+	}
 }
