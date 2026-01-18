@@ -45,6 +45,30 @@
       "loopEnabled": false,
       "maxLoops": null,
       "prompt": null
+    },
+    {
+      "id": "fabric-pr-review",
+      "title": "Fabric PR Review",
+      "description": "Comprehensive pull request review for danielmiessler/fabric repository. Covers Go code quality, Fabric pattern validation, plugin architecture compliance, security review, test execution, and changelog generation.",
+      "category": "Development",
+      "subcategory": "Review",
+      "author": "Kayvan Sylvan",
+      "authorLink": "https://www.sylvan.com",
+      "tags": ["fabric", "code-review", "pull-request", "go", "ai-patterns", "plugins", "security", "changelog"],
+      "lastUpdated": "2026-01-18",
+      "path": "~/src/maestro-playbooks-custom/playbooks/Fabric_PR_Review",
+      "documents": [
+        { "filename": "1_ANALYZE_PR", "resetOnCompletion": false },
+        { "filename": "2_GO_QUALITY", "resetOnCompletion": false },
+        { "filename": "3_FABRIC_PATTERNS", "resetOnCompletion": false },
+        { "filename": "4_FABRIC_PLUGINS", "resetOnCompletion": false },
+        { "filename": "5_SECURITY_REVIEW", "resetOnCompletion": false },
+        { "filename": "6_RUN_TESTS", "resetOnCompletion": false },
+        { "filename": "7_SUMMARIZE", "resetOnCompletion": false }
+      ],
+      "loopEnabled": false,
+      "maxLoops": null,
+      "prompt": null
     }
   ]
 }
