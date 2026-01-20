@@ -61,40 +61,7 @@ Finalize the implementation, generate changelog, and prepare PR content for subm
   Closes #XXXX"
   ```
 
-### Task 3: Generate Changelog
-
-- [ ] **Verify working directory is clean**:
-  ```bash
-  git status
-  ```
-
-- [ ] **Extract issue number**: From `ISSUE_CONTEXT.md`
-
-- [ ] **Run changelog generator**:
-  ```bash
-  go run ./cmd/generate_changelog --ai-summarize --incoming-pr <PR_NUMBER_IF_EXISTS>
-  ```
-
-  Note: If PR doesn't exist yet, generate based on commits:
-  ```bash
-  go run ./cmd/generate_changelog --ai-summarize
-  ```
-
-- [ ] **Save changelog**: Write to `{{AUTORUN_FOLDER}}/CHANGELOG.md`:
-
-```markdown
-# Generated Changelog
-
-## Issue #XXXX: [Title]
-
-[Auto-generated changelog content]
-
----
-
-*Generated on {{DATE}}*
-```
-
-### Task 4: Gather Implementation Summary
+### Task 3: Gather Implementation Summary
 
 - [ ] **Collect all changes**: Review all `PHASE_N_IMPLEMENTATION.md` files
 
@@ -105,7 +72,7 @@ Finalize the implementation, generate changelog, and prepare PR content for subm
 
 - [ ] **Summarize the solution**: Consolidate the approach taken
 
-### Task 5: Create PR Description
+### Task 4: Create PR Description
 
 - [ ] **Write PR_DESCRIPTION.md**: Create `{{AUTORUN_FOLDER}}/PR_DESCRIPTION.md`:
 
@@ -180,7 +147,32 @@ Closes #XXXX
 *PR prepared by Maestro Fabric Issue Solver Playbook*
 ```
 
-### Task 6: Create Completion Summary
+### Task 5: Use the information to create the PR
+
+To create the Pull Request:
+
+- Use content from `PR_DESCRIPTION.md`
+- Reference issue #XXXX
+- Request review from maintainers
+
+- [ ] Create the pull request and save its number (referred to in the rest of this checklist as PR_NUMBER)
+
+### Task 6: Generate the Changelog snippet using the generate_changelog tool
+
+- [ ] **Verify working directory is clean**:
+  ```bash
+  git status
+  ```
+- [ ] **Run changelog generator**:
+  ```bash
+  go run ./cmd/generate_changelog --ai-summarize --incoming-pr <PR_NUMBER>
+  ```
+- [ ] **Push the newly generated changelog snippet**
+  ```bash
+  git push
+  ```
+
+### Task 7: Create Completion Summary
 
 - [ ] **Write COMPLETION_SUMMARY.md**: Create `{{AUTORUN_FOLDER}}/COMPLETION_SUMMARY.md`:
 
@@ -216,23 +208,6 @@ Closes #XXXX
 - **Unit Tests**: [Pass count]
 - **Coverage**: [If available]
 
-## Next Steps
-
-1. **Push branch to remote**:
-   ```bash
-   git push -u origin [branch-name]
-   ```
-
-2. **Create Pull Request**:
-   - Use content from `PR_DESCRIPTION.md`
-   - Reference issue #XXXX
-   - Request review from maintainers
-
-3. **Address Review Feedback**:
-   - Monitor PR for comments
-   - Make requested changes
-   - Re-run tests after changes
-
 ## Generated Artifacts
 - `ISSUE_CONTEXT.md` - Issue details
 - `ISSUE_ANALYSIS.md` - Root cause analysis
@@ -247,7 +222,7 @@ Closes #XXXX
 The Fabric Issue Solver playbook has finished successfully.
 ```
 
-### Task 7: Final Verification
+### Task 8: Final Verification
 
 - [ ] **Confirm all artifacts exist**:
   - [ ] `ISSUE_CONTEXT.md`
@@ -280,14 +255,9 @@ Mark complete when all finalization artifacts are created.
 
 ---
 
-## Playbook Complete!
+## Playbook Complete
 
 **Generated Files:**
 - `PR_DESCRIPTION.md` - Copy this content when creating the PR
 - `CHANGELOG.md` - Include in PR or commit
 - `COMPLETION_SUMMARY.md` - Reference for what was done
-
-**Next Steps:**
-1. Push branch: `git push -u origin [branch-name]`
-2. Create PR on GitHub using `PR_DESCRIPTION.md` content
-3. Monitor and respond to review feedback
