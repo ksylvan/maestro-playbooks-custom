@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-18",
+  "lastUpdated": "2026-01-20",
   "playbooks": [
     {
       "id": "afg-website-tracking-feature",
@@ -81,6 +81,29 @@
       "tags": ["fabric", "github-issues", "implementation", "go", "iterative", "testing", "pr-preparation"],
       "lastUpdated": "2026-01-18",
       "path": "~/src/maestro-playbooks-custom/playbooks/Fabric_Issue_Solver",
+      "documents": [
+        { "filename": "1_ESTABLISH_CONTEXT", "resetOnCompletion": false },
+        { "filename": "2_ANALYZE_ISSUE", "resetOnCompletion": false },
+        { "filename": "3_CREATE_PLAN", "resetOnCompletion": false },
+        { "filename": "4_IMPLEMENT", "resetOnCompletion": false },
+        { "filename": "5_VERIFY_PROGRESS", "resetOnCompletion": true },
+        { "filename": "6_FINALIZE", "resetOnCompletion": false }
+      ],
+      "loopEnabled": true,
+      "maxLoops": 10,
+      "prompt": null
+    },
+    {
+      "id": "sylvan-issue-solver",
+      "title": "Sylvan Issue Solver",
+      "description": "Implements fixes and features from ksylvan/sylvan-website GitHub issues. Uses hybrid workflow: fixed analysis phase, then iterative implementation loop with unit test verification, E2E testing during finalization, and PR preparation against develop branch with Vercel preview deployment verification.",
+      "category": "Sylvan",
+      "subcategory": "Implementation",
+      "author": "Kayvan Sylvan",
+      "authorLink": "https://www.sylvan.com",
+      "tags": ["sylvan-website", "github-issues", "implementation", "next.js", "typescript", "iterative", "testing", "vercel", "pr-preparation"],
+      "lastUpdated": "2026-01-20",
+      "path": "~/src/maestro-playbooks-custom/playbooks/Sylvan_Issue_Solver",
       "documents": [
         { "filename": "1_ESTABLISH_CONTEXT", "resetOnCompletion": false },
         { "filename": "2_ANALYZE_ISSUE", "resetOnCompletion": false },
