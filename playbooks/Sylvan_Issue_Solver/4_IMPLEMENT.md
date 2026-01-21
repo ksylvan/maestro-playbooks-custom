@@ -79,6 +79,12 @@ For each file in the phase:
   ```
   Fix any TypeScript or build errors before proceeding.
 
+- [ ] **Run unit tests**:
+  ```bash
+  npm run test -- --run
+  ```
+  Ensure all tests pass. Fix any failing tests before proceeding.
+
 ### Task 5: Document Changes
 
 - [ ] **Create phase implementation record**: Write `{{AUTORUN_FOLDER}}/PHASE_{{LOOP_NUMBER}}_IMPLEMENTATION.md`:
