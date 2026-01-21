@@ -15,13 +15,13 @@ Establish the issue context and verify we're on a safe branch before proceeding.
 
 ## GitHub Issue
 
-**GitHub Issue**: https://github.com/ksylvan/sylvan-website/issues/XXXX
+**GitHub Issue**: <https://github.com/ksylvan/sylvan-website/issues/XXXX>
 
 > **NOTE**: Update the issue number above before running this playbook
 
 ## Additional Context
 
-*(Add any background information, related discussions, or prior attempts here)*
+Add any background information, related discussions, or prior attempts here.
 
 - Related discussions:
 - Slack/Discord notes:
@@ -64,7 +64,7 @@ Establish the issue context and verify we're on a safe branch before proceeding.
          git checkout -b feature/describe-the-change
          ```
 
-      2. Re-run this playbook
+      1. Re-run this playbook
 
       ## Why?
 

@@ -131,6 +131,7 @@ npm run build
 [What this phase accomplishes]
 
 ### Files to Modify
+
 | File | Action | Description |
 |------|--------|-------------|
 | `components/Example.tsx` | [Create/Modify/Delete] | [What changes] |
@@ -163,6 +164,7 @@ npm run test -- --run
 [What this phase accomplishes]
 
 ### Files to Modify
+
 | File | Action | Description |
 |------|--------|-------------|
 | `__tests__/example.test.ts` | [Create/Modify] | [Test coverage] |

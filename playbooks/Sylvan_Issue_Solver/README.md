@@ -90,11 +90,11 @@ The playbook is tailored for Sylvan's architecture:
 3. **Document 3** → Creates phased implementation plan
 
 ### Implementation Loop (Repeats)
-4. **Document 4** → Implements the next incomplete phase following Sylvan patterns
-5. **Document 5** → Runs tests (`npm run test -- --run`, `npm run type-check`), verifies progress
+1. **Document 4** → Implements the next incomplete phase following Sylvan patterns
+2. **Document 5** → Runs tests (`npm run test -- --run`, `npm run type-check`), verifies progress
 
 ### Finalization (Once)
-6. **Document 6** → Runs E2E tests, pushes branch, waits for Vercel preview, creates PR against `develop`
+1. **Document 6** → Runs E2E tests, pushes branch, waits for Vercel preview, creates PR against `develop`
 
 ## Working Files Generated
 
@@ -181,5 +181,5 @@ Each loop iteration:
 ## Support
 
 For issues, refer to:
-- Maestro: https://github.com/pedramamini/Maestro
-- Sylvan Website: https://github.com/ksylvan/sylvan-website
+- Maestro: <https://github.com/pedramamini/Maestro>
+- Sylvan Website: <https://github.com/ksylvan/sylvan-website>
