@@ -756,6 +756,36 @@ A 5-document playbook that objectively compares two competing PRs implementing t
 - Supports "Too Close to Call" outcome when scores are within 5 points
 - Extracts "gems" from runner-up for cross-pollination
 
+### Iterative Issue Solver: Sylvan Issue Solver
+
+**Path**: `playbooks/Sylvan_Issue_Solver/`
+
+A 6-document hybrid playbook that implements fixes and features from GitHub issues in the ksylvan/sylvan-website repository. Demonstrates the **iterative pattern** with a fixed analysis phase followed by a looping implementation cycle.
+
+| Document | Purpose |
+|----------|---------|
+| `1_ESTABLISH_CONTEXT` | Configure GitHub issue, validate branch safety |
+| `2_ANALYZE_ISSUE` | Deep-dive into issue requirements, codebase analysis |
+| `3_CREATE_PLAN` | Break down work into atomic implementation tasks |
+| `4_IMPLEMENT` | Execute ONE task per loop iteration with unit tests |
+| `5_VERIFY_PROGRESS` | Loop gate: continue if PENDING tasks remain |
+| `6_FINALIZE` | E2E testing, PR creation, Vercel preview verification |
+
+**Key characteristics:**
+- `loopEnabled: true` with `maxLoops: 10` — iterative implementation
+- Document 5 has `resetOnCompletion: true` (loop control)
+- **Hybrid workflow**: Fixed analysis (docs 1-3), iterative implementation (docs 4-5), fixed finalization (doc 6)
+- Unit test verification in each implementation loop
+- E2E testing with Playwright during finalization
+- PR preparation against `develop` branch with Vercel preview deployment
+- Technology stack: Next.js, TypeScript, Vitest, Playwright, Tailwind, Vercel
+
+**Working files generated:**
+- `ISSUE_CONTEXT.md` — Issue details and configuration
+- `LOOP_N_IMPLEMENTATION_PLAN.md` — Prioritized task breakdown
+- `LOOP_N_PROGRESS.md` — Implementation status tracking
+- `IMPLEMENTATION_SUMMARY.md` — Final summary and PR details
+
 ### When to Use Each Pattern
 
 | Pattern | Use When | Example |
@@ -763,6 +793,7 @@ A 5-document playbook that objectively compares two competing PRs implementing t
 | **Linear (no loop)** | Sequential steps that build on each other | Feature implementation, migrations |
 | **Comparative** | Evaluating multiple options against criteria | PR comparison, tech stack evaluation |
 | **Looping (5-doc chain)** | Iterative discovery and implementation | Bug fixing, refactoring, documentation gaps |
+| **Hybrid (fixed + loop)** | Analysis phase then iterative implementation | GitHub issue resolution, feature development |
 
 ---
 
