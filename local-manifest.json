@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-20",
+  "lastUpdated": "2026-01-24",
   "playbooks": [
     {
       "id": "afg-website-tracking-feature",
@@ -114,6 +114,29 @@
       ],
       "loopEnabled": true,
       "maxLoops": 10,
+      "prompt": null
+    },
+    {
+      "id": "i18n-cleanup",
+      "title": "Internationalization Cleanup",
+      "description": "Systematically identifies and fixes hard-coded strings by replacing them with proper i18n patterns. Auto-detects i18n system, generates AI translations for all supported languages, and fixes violations one file at a time with test verification.",
+      "category": "Development",
+      "subcategory": "Internationalization",
+      "author": "Kayvan Sylvan",
+      "authorLink": "https://www.sylvan.com",
+      "tags": ["i18n", "internationalization", "translations", "code-quality", "refactoring", "ai-translation"],
+      "lastUpdated": "2026-01-24",
+      "path": "~/src/maestro-playbooks-custom/playbooks/i18n_Cleanup",
+      "documents": [
+        { "filename": "1_ESTABLISH_CONTEXT", "resetOnCompletion": false },
+        { "filename": "2_ANALYZE_I18N_SETUP", "resetOnCompletion": false },
+        { "filename": "3_FIND_VIOLATIONS", "resetOnCompletion": false },
+        { "filename": "4_IMPLEMENT", "resetOnCompletion": false },
+        { "filename": "5_VERIFY_PROGRESS", "resetOnCompletion": true },
+        { "filename": "6_FINALIZE", "resetOnCompletion": false }
+      ],
+      "loopEnabled": true,
+      "maxLoops": 20,
       "prompt": null
     }
   ]
