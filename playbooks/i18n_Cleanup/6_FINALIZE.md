@@ -278,6 +278,31 @@ FILE_LOG_COUNT=$(ls {{AUTORUN_FOLDER}}/FILE_*_FIXES.md 2>/dev/null | wc -l)
 echo "✅ $FILE_LOG_COUNT implementation logs"
 ```
 
+- [ ] **Unstage tracking files** - Ensure playbook working files aren't committed:
+
+```bash
+# CRITICAL: These tracking files are for playbook use only - DO NOT commit them
+# They track our progress but are not part of the repository changes
+
+echo "Ensuring tracking files are not staged for commit..."
+
+# Unstage all playbook tracking files
+git reset HEAD {{AUTORUN_FOLDER}}/I18N_CONTEXT.md 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/I18N_SETUP.md 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/UNUSED_KEYS.md 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/MANUAL_REVIEW.md 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/FILE_*_FIXES.md 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/TEST_RESULTS.md 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/test_output_*.log 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/build_output_*.log 2>/dev/null || true
+
+echo "✅ Tracking files excluded from git staging"
+echo ""
+echo "NOTE: PR_DESCRIPTION.md and CLEANUP_SUMMARY.md can optionally be committed"
+echo "      as documentation if desired, but are not required."
+```
+
 - [ ] **Final summary**:
 
 ```bash
@@ -297,9 +322,30 @@ echo "   1. Review: {{AUTORUN_FOLDER}}/MANUAL_REVIEW.md"
 echo "   2. Create PR: {{AUTORUN_FOLDER}}/PR_DESCRIPTION.md"
 echo "   3. Full summary: {{AUTORUN_FOLDER}}/CLEANUP_SUMMARY.md"
 echo ""
+echo "⚠️  IMPORTANT: Tracking files have been excluded from git staging"
+echo "   Only commit source code changes and translation file updates"
+echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 ```
 
 ## Notes
 
 This document completes the playbook. All working files have been generated and the changes are ready for pull request creation.
+
+**What to commit:**
+- Source code changes (i18n function calls replacing hard-coded strings)
+- Translation file updates (new keys added)
+- Optionally: PR_DESCRIPTION.md and CLEANUP_SUMMARY.md as documentation
+
+**What NOT to commit (tracking files only):**
+- I18N_CONTEXT.md
+- I18N_SETUP.md
+- VIOLATIONS_PLAN.md
+- UNUSED_KEYS.md
+- MANUAL_REVIEW.md
+- FILE_*_FIXES.md
+- TEST_RESULTS.md
+- test_output_*.log
+- build_output_*.log
+
+These tracking files are automatically unstaged to prevent accidental commits.

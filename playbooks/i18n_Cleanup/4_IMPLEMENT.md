@@ -38,7 +38,17 @@ echo "📝 Processing file: $NEXT_FILE"
 
 - [ ] **Update status to IN_PROGRESS** in VIOLATIONS_PLAN.md:
 
-Replace the PENDING status with IN_PROGRESS for the selected file.
+```bash
+# Update the status for the file we're about to process using awk
+awk -F'|' -v file="$NEXT_FILE" 'BEGIN {OFS="|"}
+  $3 ~ file && $6 ~ /PENDING/ {$6 = " IN_PROGRESS "; print; next}
+  {print}' {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md > {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md.tmp && \
+  mv {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md.tmp {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md
+
+# Verify the update
+echo "Status updated to IN_PROGRESS for: $NEXT_FILE"
+grep "$NEXT_FILE" {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md
+```
 
 - [ ] **Read the file** and identify all hard-coded strings:
 
@@ -225,9 +235,39 @@ Create `{{AUTORUN_FOLDER}}/FILE_{{LOOP_NUMBER}}_FIXES.md`:
 
 - [ ] **Update VIOLATIONS_PLAN.md** - Mark file as COMPLETE:
 
-Replace IN_PROGRESS status with COMPLETE for this file.
+```bash
+# Update the status to COMPLETE for the file we just processed using awk
+awk -F'|' -v file="$NEXT_FILE" 'BEGIN {OFS="|"}
+  $3 ~ file && $6 ~ /IN_PROGRESS/ {$6 = " COMPLETE "; print; next}
+  {print}' {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md > {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md.tmp && \
+  mv {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md.tmp {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md
 
-Add completion timestamp if tracking detailed progress.
+# Verify the update
+echo "Status updated to COMPLETE for: $NEXT_FILE"
+grep "$NEXT_FILE" {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md
+
+# Verify PENDING count
+REMAINING=$(grep -c "| PENDING |" {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md || echo 0)
+echo "Remaining PENDING files: $REMAINING"
+```
+
+- [ ] **Unstage tracking files** - Ensure playbook working files aren't committed:
+
+```bash
+# These files are for playbook tracking only - DO NOT commit them
+# If they were accidentally staged, unstage them now
+git reset HEAD {{AUTORUN_FOLDER}}/I18N_CONTEXT.md 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/I18N_SETUP.md 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/UNUSED_KEYS.md 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/MANUAL_REVIEW.md 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/FILE_*_FIXES.md 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/TEST_RESULTS.md 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/test_output_*.log 2>/dev/null || true
+git reset HEAD {{AUTORUN_FOLDER}}/build_output_*.log 2>/dev/null || true
+
+echo "✅ Tracking files excluded from git staging"
+```
 
 - [ ] **Validate changes**:
 
@@ -237,6 +277,7 @@ echo "✅ Translation keys added to all language files"
 echo "✅ Source code updated with i18n calls"
 echo "✅ FILE_{{LOOP_NUMBER}}_FIXES.md created"
 echo "✅ VIOLATIONS_PLAN.md updated to COMPLETE"
+echo "✅ Tracking files excluded from commits"
 echo "✅ Ready for verification in Document 5"
 ```
 
