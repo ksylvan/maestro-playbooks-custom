@@ -1,4 +1,4 @@
-# Verify Progress
+# Verify Progress - i18n Cleanup Gate
 
 ## Context
 
@@ -11,11 +11,19 @@
 
 ## Purpose
 
-Verify the most recent file's i18n fixes with tests and build checks, then determine whether to continue looping or exit to finalization.
+This document verifies the most recent file's i18n fixes with tests and build checks, then determines whether to continue looping or exit to finalization. **This is the only document with Reset ON** - it controls loop continuation by resetting Document 4 when more work remains.
 
-**CRITICAL:** This document has `resetOnCompletion: true` and controls the loop.
+## Instructions
 
-## Tasks
+1. **Review the latest implementation** from FILE_N_FIXES.md files
+2. **Run tests** to verify no breakage
+3. **Run build verification** to ensure compilation
+4. **Update TEST_RESULTS.md** with verification output
+5. **Check for remaining PENDING files** in VIOLATIONS_PLAN.md
+6. **If PENDING files exist**: Reset Document 4 to continue the loop
+7. **If NO PENDING files**: Do NOT reset - pipeline exits to Document 6
+
+## Verification Tasks
 
 - [ ] **Read latest implementation**:
 
@@ -137,67 +145,107 @@ if [ $TEST_EXIT_CODE -ne 0 ] || [ $BUILD_EXIT_CODE -ne 0 ]; then
 fi
 ```
 
-- [ ] **Check for remaining work** - Determine if loop should continue:
+## Loop Gate Check
 
-```bash
-# Count PENDING files in violations plan
-PENDING_COUNT=$(grep -c "| PENDING |" {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md || echo 0)
+- [ ] **Check for remaining files and decide**: Read `{{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md` and check for files with status `PENDING`. The loop should CONTINUE (reset Document 4 below) if there are items with status `PENDING`. The loop should EXIT (do NOT reset Document 4) when there are no `PENDING` files remaining. Display a summary showing: (1) number of COMPLETE files, (2) number of PENDING files, (3) number of manual review items, and (4) the decision to CONTINUE or EXIT.
 
-echo "Files remaining: $PENDING_COUNT"
-```
+## Reset Task (Only if PENDING files remain)
 
-- [ ] **Loop control decision**:
+If the loop gate check above determines we need to continue (PENDING files exist), reset Document 4 to process the next file:
 
-```bash
-if [ $PENDING_COUNT -gt 0 ]; then
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo "🔄 CONTINUE LOOP: $PENDING_COUNT files still PENDING"
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo ""
-  echo "Resetting to Document 4 to process next file..."
-  echo ""
-  # Document will auto-reset due to resetOnCompletion: true
-else
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo "✅ EXIT LOOP: All files processed"
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo ""
-  echo "Proceeding to Document 6: Finalize"
-  echo ""
-  # Document will NOT reset, allowing progression to Document 6
-fi
-```
+- [ ] **Reset 4_IMPLEMENT.md**: Uncheck all tasks in `{{AUTORUN_FOLDER}}/4_IMPLEMENT.md`
 
-- [ ] **Create progress summary**:
+**IMPORTANT**: Only reset Document 4 if there are PENDING files remaining in VIOLATIONS_PLAN.md. If all files are COMPLETE, SKIP, or MANUAL_REVIEW, leave this reset task unchecked to allow the pipeline to exit to Document 6.
 
-```bash
-echo "=== Loop {{LOOP_NUMBER}} Summary ==="
-echo "Completed files: $(grep -c '| COMPLETE |' {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md || echo 0)"
-echo "Pending files: $PENDING_COUNT"
-echo "Manual review items: $(grep -c '^###' {{AUTORUN_FOLDER}}/MANUAL_REVIEW.md || echo 0)"
-echo ""
-
-if [ $PENDING_COUNT -eq 0 ]; then
-  echo "✅ All violations addressed - ready for finalization"
-fi
-```
-
-## Loop Control Logic
+## Decision Logic
 
 ```
-IF no FILE_N_FIXES.md exists yet:
-    → Analysis phase just completed, proceed to implementation
+IF VIOLATIONS_PLAN.md contains files with status "PENDING":
+    → Reset Document 4 (CONTINUE TO PROCESS NEXT FILE)
 
-ELSE IF files with status "PENDING" exist in VIOLATIONS_PLAN.md:
-    → Continue loop (this document resets, returns to Document 4)
-
-ELSE IF test/build failures need manual intervention:
-    → Can mark as MANUAL_REVIEW and continue, or exit
-
-ELSE (no PENDING files):
-    → Exit loop (this document does NOT reset, proceeds to Document 6)
+ELSE IF all files are COMPLETE, SKIP, or MANUAL_REVIEW:
+    → Do NOT reset anything (ALL WORK COMPLETE - EXIT TO FINALIZE)
 ```
+
+## How This Works
+
+This document controls loop continuation through resets:
+- **Reset task checked** → Document 4 gets reset → Loop continues
+- **Reset task unchecked** → Nothing gets reset → Pipeline exits to Document 6
+- **Document 5 auto-resets** via Maestro's `resetOnCompletion: true` - no manual reset needed
+
+### Exit Conditions (Do NOT Reset)
+
+Exit when ALL of these are true:
+1. **All files processed**: No files with status `PENDING` in VIOLATIONS_PLAN.md
+2. **Verification passed**: Tests and build succeeded (or failures addressed)
+
+Also exit if:
+3. **Max Loops**: Hit the loop limit (20) in Batch Runner
+
+### Continue Conditions (Reset Document 4)
+
+Continue if:
+1. There are files with status exactly `PENDING` in VIOLATIONS_PLAN.md
+2. We haven't hit max loops
+
+## Current Status
+
+Before making a decision, check the progress:
+
+| Category | Count |
+|----------|-------|
+| **COMPLETE files** | ___ |
+| **PENDING files** | ___ |
+| **SKIP files** | ___ |
+| **MANUAL_REVIEW files** | ___ |
+| **Manual review items** | ___ |
+| **Tests passed?** | YES / NO |
+| **Build passed?** | YES / NO |
+
+## Progress History
+
+Track progress across loops:
+
+| Loop | Files Complete | Files Pending | Strings Fixed | Decision |
+|------|----------------|---------------|---------------|----------|
+| 1 | ___ | ___ | ___ | [CONTINUE / EXIT] |
+| 2 | ___ | ___ | ___ | [CONTINUE / EXIT] |
+| ... | ... | ... | ... | ... |
+
+## Manual Override
+
+**To force exit early:**
+- Leave the reset task unchecked regardless of remaining PENDING files
+- Document justification in VIOLATIONS_PLAN.md
+
+**To continue past manual review items:**
+- Check the reset task to keep processing
+- Will loop back to find next PENDING file
+
+**To pause for review:**
+- Leave reset task unchecked
+- Review MANUAL_REVIEW.md and TEST_RESULTS.md
+- Address flagged items
+- Restart when ready
+
+## Remaining Work Summary
+
+Items that still need attention after this loop:
+
+### Needs Manual Review
+- [ ] [Filename]: [reason for manual review]
+
+### Test/Build Failures
+- [ ] [Filename]: [what failed and why]
+
+### Skipped Files
+- [ ] [Filename]: [reason for skip]
 
 ## Notes
 
-This document acts as the **loop gate**. Its `resetOnCompletion: true` setting causes Documents 4-5 to repeat when PENDING work remains.
+- The goal is **zero hard-coded strings** in production code
+- Some strings may be acceptable to skip (debug output, internal tools)
+- Test failures may indicate pre-existing issues unrelated to i18n changes
+- Quality matters more than hitting 100% - some edge cases are acceptable
+- Document all skip/manual-review decisions for future reference
