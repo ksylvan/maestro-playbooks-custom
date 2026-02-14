@@ -66,30 +66,7 @@ fi
 
 - [ ] **Run build verification** (if applicable):
 
-```bash
-if [ -f "go.mod" ]; then
-  echo "Running Go build verification..."
-  go build ./... 2>&1 | tee {{AUTORUN_FOLDER}}/build_output_loop_{{LOOP_NUMBER}}.log
-  BUILD_EXIT_CODE=$?
-elif [ -f "package.json" ]; then
-  echo "Running npm build verification..."
-  npm run build 2>&1 | tee {{AUTORUN_FOLDER}}/build_output_loop_{{LOOP_NUMBER}}.log
-  BUILD_EXIT_CODE=$?
-elif [ -f "Makefile" ]; then
-  echo "Running make build..."
-  make build 2>&1 | tee {{AUTORUN_FOLDER}}/build_output_loop_{{LOOP_NUMBER}}.log
-  BUILD_EXIT_CODE=$?
-else
-  echo "No build system detected - skipping build verification"
-  BUILD_EXIT_CODE=0
-fi
-
-if [ $BUILD_EXIT_CODE -eq 0 ]; then
-  echo "Build verification passed"
-else
-  echo "Build failed with exit code $BUILD_EXIT_CODE"
-fi
-```
+Read the **Build Command** from `{{AUTORUN_FOLDER}}/I18N_SETUP.md` (which was populated in Doc 2). Run that command and capture the output to `{{AUTORUN_FOLDER}}/build_output_loop_{{LOOP_NUMBER}}.log`. If no build command was configured, skip build verification.
 
 ### Task 4: Update Test Results
 
