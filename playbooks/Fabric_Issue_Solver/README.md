@@ -31,15 +31,11 @@ This playbook uses a **hybrid pattern** with a fixed analysis phase and iterativ
 │  IMPLEMENTATION LOOP (repeats until complete)       │
 ├─────────────────────────────────────────────────────┤
 │  4_IMPLEMENT.md          → Execute one phase        │
-│  5_VERIFY_PROGRESS.md    → Test & check progress    │
+│  5_PROGRESS.md           → Test, verify, loop gate  │
 │         ↑                         │                 │
 │         └── more phases ──────────┘                 │
-└─────────────────────────────────────────────────────┘
-                        ↓ (all phases complete)
-┌─────────────────────────────────────────────────────┐
-│  FINALIZATION (runs once)                           │
-├─────────────────────────────────────────────────────┤
-│  6_FINALIZE.md           → Prepare PR content       │
+│                                   ↓ (all complete)  │
+│                         Finalize: PR + changelog    │
 └─────────────────────────────────────────────────────┘
 ```
 
@@ -76,10 +72,10 @@ This playbook uses a **hybrid pattern** with a fixed analysis phase and iterativ
 
 ### Implementation Loop (Repeats)
 4. **Document 4** → Implements the next incomplete phase
-5. **Document 5** → Runs tests, verifies progress, triggers loop if more phases
+5. **Document 5** → Runs tests, verifies progress, resets docs 4-5 if more phases remain
 
-### Finalization (Once)
-6. **Document 6** → Generates PR description, changelog, and summary
+### Finalization (Doc 5 exit path)
+When all phases are COMPLETE, Document 5 generates PR description, creates the PR, runs changelog generation, and writes the completion summary.
 
 ## Working Files Generated
 
@@ -136,7 +132,7 @@ Each loop iteration:
 
 ## Exit Conditions
 
-- **Success**: All phases complete, tests pass → proceeds to Document 6
+- **Success**: All phases complete, tests pass → Doc 5 runs finalization tasks
 - **Max Loops**: Reached loop limit → exits with partial progress
 - **Branch Error**: On `main` branch → halts immediately
 - **Test Failure**: Persistent test failures → marks phase as `BLOCKED`
