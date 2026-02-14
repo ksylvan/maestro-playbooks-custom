@@ -190,74 +190,7 @@ Ensure:
 - Formatting/interpolation is preserved correctly
 - Code still compiles/runs
 
-- [ ] **Apply automated pattern fixes** - Fix common i18n code patterns automatically:
-
-Pattern 1: fmt.Errorf with non-constant format string
-
-Go's linter requires format strings to be constant. When using i18n.T() in fmt.Errorf, add a format specifier:
-
-```go
-// WRONG - triggers "non-constant format string in call to fmt.Errorf"
-return fmt.Errorf(i18n.T("extension_registry_not_initialized"))
-
-// CORRECT - add %s format specifier
-return fmt.Errorf("%s", i18n.T("extension_registry_not_initialized"))
-```
-
-Apply this fix automatically - no human intervention needed. Search for all instances of `fmt.Errorf(i18n.T("..."))` and convert to `fmt.Errorf("%s", i18n.T("..."))`.
-
-Pattern 2: Whitespace and formatting in translations
-
-Translation strings should contain ONLY the text content. All formatting characters (tabs, newlines, spaces) must stay in the source code.
-
-```go
-// WRONG - formatting inside translation
-// Translation: "some_example_string" => "\t\t    This is an example\n\n"
-// Code:
-printf(i18n.T("some_example_string"))
-
-// CORRECT - formatting in code, clean translation
-// Translation: "some_example_string" => "This is an example"
-// Code:
-printf("\t\t    %s\n\n", i18n.T("some_example_string"))
-```
-
-**Apply this fix automatically**:
-1. Extract leading/trailing whitespace and formatting from the original string
-2. Create translation key with clean text only (no tabs, no leading/trailing spaces, no newlines)
-3. Update code to include formatting characters outside the i18n.T() call using format specifiers
-
-**More examples:**
-
-```go
-// Original code
-fmt.Println("\n\nProcessing file: " + filename + "\n")
-
-// WRONG translation
-"processing_file" => "\n\nProcessing file: %s\n"
-fmt.Println(i18n.T("processing_file", filename))
-
-// CORRECT translation
-"processing_file" => "Processing file: %s"
-fmt.Println("\n\n" + i18n.T("processing_file", filename) + "\n")
-// OR
-fmt.Printf("\n\n%s\n", i18n.T("processing_file", filename))
-```
-
-```go
-// Original code
-log.Info("    [DEBUG] Starting operation...")
-
-// WRONG translation
-"debug_starting" => "    [DEBUG] Starting operation..."
-log.Info(i18n.T("debug_starting"))
-
-// CORRECT translation
-"debug_starting" => "Starting operation..."
-log.Info("    [DEBUG] " + i18n.T("debug_starting"))
-```
-
-**Key principle:** If whitespace/formatting is for layout/alignment, it belongs in code. If it's part of the actual message content, it can stay in the translation.
+- [ ] **Apply language-specific pattern fixes** - Read `I18N_SETUP.md` to determine the project language. If the project uses Go, read and apply the patterns from `playbooks/i18n_Cleanup/assets/go-patterns.md` (handles `fmt.Errorf` linter issues and whitespace-in-translations). For other languages, check for similar linter/formatter requirements and apply fixes as needed.
 
 - [ ] **Create implementation log** for this file:
 
@@ -320,24 +253,6 @@ REMAINING=$(grep -c "| PENDING |" {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md || echo 
 echo "Remaining PENDING files: $REMAINING"
 ```
 
-- [ ] **Unstage tracking files** - Ensure playbook working files aren't committed:
-
-```bash
-# These files are for playbook tracking only - DO NOT commit them
-# If they were accidentally staged, unstage them now
-git reset HEAD {{AUTORUN_FOLDER}}/I18N_CONTEXT.md 2>/dev/null || true
-git reset HEAD {{AUTORUN_FOLDER}}/I18N_SETUP.md 2>/dev/null || true
-git reset HEAD {{AUTORUN_FOLDER}}/VIOLATIONS_PLAN.md 2>/dev/null || true
-git reset HEAD {{AUTORUN_FOLDER}}/UNUSED_KEYS.md 2>/dev/null || true
-git reset HEAD {{AUTORUN_FOLDER}}/MANUAL_REVIEW.md 2>/dev/null || true
-git reset HEAD {{AUTORUN_FOLDER}}/FILE_*_FIXES.md 2>/dev/null || true
-git reset HEAD {{AUTORUN_FOLDER}}/TEST_RESULTS.md 2>/dev/null || true
-git reset HEAD {{AUTORUN_FOLDER}}/test_output_*.log 2>/dev/null || true
-git reset HEAD {{AUTORUN_FOLDER}}/build_output_*.log 2>/dev/null || true
-
-echo "✅ Tracking files excluded from git staging"
-```
-
 - [ ] **Validate changes**:
 
 ```bash
@@ -346,7 +261,6 @@ echo "✅ Translation keys added to all language files"
 echo "✅ Source code updated with i18n calls"
 echo "✅ FILE_{{LOOP_NUMBER}}_FIXES.md created"
 echo "✅ VIOLATIONS_PLAN.md updated to COMPLETE"
-echo "✅ Tracking files excluded from commits"
 echo "✅ Ready for verification in Document 5"
 ```
 

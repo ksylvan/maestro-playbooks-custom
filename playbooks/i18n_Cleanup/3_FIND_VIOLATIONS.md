@@ -24,11 +24,7 @@ cat {{AUTORUN_FOLDER}}/I18N_SETUP.md
 
 - [ ] **Extract scan scope** from configuration:
 
-```bash
-# Read the configured scope from I18N_CONTEXT.md
-SCAN_SCOPE=$(grep "Scan Scope:" {{AUTORUN_FOLDER}}/I18N_CONTEXT.md | cut -d: -f2 | xargs)
-echo "Scanning scope: $SCAN_SCOPE"
-```
+Read `{{AUTORUN_FOLDER}}/I18N_CONTEXT.md` directly and extract the **Scan Scope** value from the Configuration section. Do not use shell parsing (grep/cut) — the scope value may contain colons (e.g., Windows paths or URLs).
 
 - [ ] **Scan for hard-coded strings** - Search for common patterns of user-facing strings:
 

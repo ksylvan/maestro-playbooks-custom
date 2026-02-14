@@ -48,7 +48,8 @@ This playbook systematically identifies and fixes hard-coded strings in your cod
 - **Phase 2 (Documents 4-5)**: Loops until all files are fixed
   - Fixes ONE file per iteration
   - Runs tests and build verification
-  - Continues if PENDING files remain
+  - Doc 5 is the loop gate — it has `resetOnCompletion: true` in the manifest, so Maestro automatically resets Docs 1-5 when work remains
+  - Continues if PENDING files remain; exits to Doc 6 when all files are processed
 - **Phase 3 (Document 6)**: Runs once to finalize and generate PR
 
 **Max Loops**: 20 (adjustable in manifest)
@@ -92,7 +93,7 @@ The playbook exits when:
 ## Technical Details
 
 **Supported i18n Patterns** (auto-detected):
-- Go: `embed.FS` with JSON/YAML translations
+- Go: `embed.FS` with JSON/YAML translations (see `assets/go-patterns.md` for Go-specific linter fixes)
 - JavaScript: i18next, react-intl, vue-i18n
 - Python: gettext, babel
 - Ruby: Rails i18n, r18n
