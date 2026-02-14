@@ -32,15 +32,11 @@ This playbook uses a **hybrid pattern** with a fixed analysis phase and iterativ
 │  IMPLEMENTATION LOOP (repeats until complete)               │
 ├─────────────────────────────────────────────────────────────┤
 │  4_IMPLEMENT.md          → Execute one phase                │
-│  5_VERIFY_PROGRESS.md    → Test & check progress            │
+│  5_PROGRESS.md           → Test, verify, loop gate          │
 │         ↑                         │                         │
 │         └── more phases ──────────┘                         │
-└─────────────────────────────────────────────────────────────┘
-                        ↓ (all phases complete)
-┌─────────────────────────────────────────────────────────────┐
-│  FINALIZATION (runs once)                                   │
-├─────────────────────────────────────────────────────────────┤
-│  6_FINALIZE.md           → E2E tests, PR, Vercel deploy     │
+│                                   ↓ (all complete)          │
+│                     Finalize: E2E, Vercel, PR to develop    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -91,10 +87,10 @@ The playbook is tailored for Sylvan's architecture:
 
 ### Implementation Loop (Repeats)
 1. **Document 4** → Implements the next incomplete phase following Sylvan patterns
-2. **Document 5** → Runs tests (`npm run test -- --run`, `npm run type-check`), verifies progress
+2. **Document 5** → Runs tests (`npm run test -- --run`, `npm run type-check`), verifies progress, resets docs 4-5 if more phases remain
 
-### Finalization (Once)
-1. **Document 6** → Runs E2E tests, pushes branch, waits for Vercel preview, creates PR against `develop`
+### Finalization (Doc 5 exit path)
+When all phases are COMPLETE, Document 5 runs E2E tests, pushes branch, waits for Vercel preview deployment, verifies the preview site, and creates PR against `develop`.
 
 ## Working Files Generated
 
@@ -121,7 +117,7 @@ This prevents accidental commits to protected branches.
 
 ## Vercel Deployment Flow
 
-The finalization phase handles Vercel deployment:
+Document 5's exit path handles Vercel deployment:
 
 1. **Push Branch** → Triggers Vercel preview deployment automatically
 2. **Check Status** → Runs `npm run deploy-info` to get deployment status
@@ -173,7 +169,7 @@ Each loop iteration:
 
 ## Exit Conditions
 
-- **Success**: All phases complete, tests pass → proceeds to Document 6
+- **Success**: All phases complete, tests pass → Doc 5 runs finalization tasks
 - **Max Loops**: Reached loop limit → exits with partial progress
 - **Branch Error**: On `main` or `develop` branch → halts immediately
 - **Test Failure**: Persistent test failures → marks phase as `BLOCKED`
