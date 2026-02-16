@@ -190,7 +190,7 @@ Ensure:
 - Formatting/interpolation is preserved correctly
 - Code still compiles/runs
 
-- [ ] **Apply language-specific pattern fixes** - Read `I18N_SETUP.md` to determine the project language. If the project uses Go, read and apply the patterns from `playbooks/i18n_Cleanup/assets/go-patterns.md` (handles `fmt.Errorf` linter issues and whitespace-in-translations). For other languages, check for similar linter/formatter requirements and apply fixes as needed.
+- [ ] **Apply language-specific pattern fixes** - Read `I18N_SETUP.md` to determine the project language. If the project uses Go, read and apply the patterns from `{{AUTORUN_FOLDER}}/assets/go-patterns.md` (handles `fmt.Errorf` linter issues and whitespace-in-translations). For other languages, check for similar linter/formatter requirements and apply fixes as needed.
 
 - [ ] **Create implementation log** for this file:
 
