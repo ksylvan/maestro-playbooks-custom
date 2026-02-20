@@ -24,11 +24,12 @@ Discovery and implementation cycles that repeat until complete:
 1_ANALYZE.md     -> Survey target, identify what to investigate
 2_FIND_*.md      -> Find specific issues/gaps/entities
 3_EVALUATE.md    -> Rate candidates by priority criteria
-4_IMPLEMENT.md   -> Execute ONE item per loop iteration
-5_PROGRESS.md    -> Loop gate: resets 1-4 if work remains, exits if done
+4_IMPLEMENT.md   -> Execute ONE item per loop iteration (resetOnCompletion: true)
+5_PROGRESS.md    -> Verify and test (resetOnCompletion: true)
+6_GATE.md        -> Loop gate + finalize when done (resetOnCompletion: false)
 ```
 
-**Loop Control**: Only document 5 should have `resetOnCompletion: true`.
+**Loop Control**: Documents 4-5 have `resetOnCompletion: true` (Maestro auto-resets them each iteration). Document 6 is the gate — it has `resetOnCompletion: false` and is the only non-reset document in the loop. Maestro continues looping as long as any non-reset document has unchecked tasks.
 
 ## Document Requirements
 

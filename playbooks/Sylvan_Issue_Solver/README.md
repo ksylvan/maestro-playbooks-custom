@@ -31,12 +31,13 @@ This playbook uses a **hybrid pattern** with a fixed analysis phase and iterativ
 ┌─────────────────────────────────────────────────────────────┐
 │  IMPLEMENTATION LOOP (repeats until complete)               │
 ├─────────────────────────────────────────────────────────────┤
-│  4_IMPLEMENT.md          → Execute one phase                │
-│  5_PROGRESS.md           → Test, verify, loop gate          │
+│  4_IMPLEMENT.md (reset)  → Execute one phase                │
+│  5_PROGRESS.md  (reset)  → Test and verify                   │
+│  6_GATE.md   (non-reset) → Gate + finalize                   │
 │         ↑                         │                         │
 │         └── more phases ──────────┘                         │
 │                                   ↓ (all complete)          │
-│                     Finalize: E2E, Vercel, PR to develop    │
+│                     Pipeline exits                          │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -86,11 +87,12 @@ The playbook is tailored for Sylvan's architecture:
 3. **Document 3** → Creates phased implementation plan
 
 ### Implementation Loop (Repeats)
-1. **Document 4** → Implements the next incomplete phase following Sylvan patterns
-2. **Document 5** → Runs tests (`npm run test -- --run`, `npm run type-check`), verifies progress, resets docs 4-5 if more phases remain
+1. **Document 4** → Implements the next incomplete phase following Sylvan patterns (`resetOnCompletion: true`)
+2. **Document 5** → Runs tests (`npm run test -- --run`, `npm run type-check`), verifies progress (`resetOnCompletion: true`)
+3. **Document 6** → Loop gate + finalization: checks `IMPLEMENTATION_PLAN.md` for PENDING phases (`resetOnCompletion: false`)
 
-### Finalization (Doc 5 exit path)
-When all phases are COMPLETE, Document 5 runs E2E tests, pushes branch, waits for Vercel preview deployment, verifies the preview site, and creates PR against `develop`.
+### Finalization (Doc 6)
+When all phases are COMPLETE, Document 6's finalization tasks run E2E tests, push branch, wait for Vercel preview deployment, verify the preview site, and create PR against `develop`.
 
 ## Working Files Generated
 
@@ -156,7 +158,7 @@ You can also add background context:
 
 ## Loop Behavior
 
-The playbook loops through documents 4-5 until:
+The playbook loops through documents 4-6 until:
 - All phases in `IMPLEMENTATION_PLAN.md` are marked `COMPLETE`
 - Or max loops (10) is reached
 - Or a phase fails verification repeatedly

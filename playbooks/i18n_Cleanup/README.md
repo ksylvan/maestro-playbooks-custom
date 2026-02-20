@@ -45,12 +45,12 @@ This playbook systematically identifies and fixes hard-coded strings in your cod
 ## Loop Behavior
 
 - **Analysis Phase (Documents 1-3)**: Runs once to analyze and find violations
-- **Implementation Loop (Documents 4-5)**: Loops until all files are fixed
-  - Fixes ONE file per iteration (Doc 4)
-  - Runs tests and build verification (Doc 5)
-  - Doc 5 is the loop gate — it has `resetOnCompletion: true` and contains explicit reset checkboxes for Docs 4-5
-  - Continues if PENDING files remain; runs finalization tasks within Doc 5 when all files are processed
-- **Finalization (Doc 5 exit path)**: When no PENDING files remain, Doc 5 generates PR description, cleanup summary, and unstages tracking files
+- **Implementation Loop (Documents 4-6)**: Loops until all files are fixed
+  - Fixes ONE file per iteration (Doc 4, `resetOnCompletion: true`)
+  - Runs tests and build verification (Doc 5, `resetOnCompletion: true`)
+  - Loop gate + finalization (Doc 6, `resetOnCompletion: false`) — reads `VIOLATIONS_PLAN.md`; unchecked = loop continues, checked = done then finalize
+  - Maestro auto-resets docs 4-5 each iteration; only doc 6 (non-reset) drives loop continuation
+- **Finalization (Doc 6)**: When no PENDING files remain, Doc 6 generates PR description, cleanup summary, and unstages tracking files
 
 **Max Loops**: 20 (adjustable in manifest)
 

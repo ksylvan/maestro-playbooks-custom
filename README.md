@@ -144,8 +144,9 @@ Every playbook follows this structure:
 1_ANALYZE.md     -> Survey target, identify what to investigate
 2_FIND_*.md      -> Find specific issues/gaps/entities
 3_EVALUATE.md    -> Rate candidates by priority criteria
-4_IMPLEMENT.md   -> Execute ONE item per loop iteration
-5_PROGRESS.md    -> Loop gate: resets 1-4 if work remains, exits if done
+4_IMPLEMENT.md   -> Execute ONE item per loop iteration (resetOnCompletion: true)
+5_PROGRESS.md    -> Verify and test (resetOnCompletion: true)
+6_GATE.md        -> Loop gate + finalize when done (resetOnCompletion: false)
 ```
 
 ### Loop Control Mechanism
@@ -153,10 +154,12 @@ Every playbook follows this structure:
 | Document | Reset Setting | Behavior |
 |----------|--------------|----------|
 | 0_INITIALIZE.md | `Reset: OFF` | Runs once at start |
-| 1-4 Documents | `Reset: OFF` | Don't auto-reset when completed |
-| 5_PROGRESS.md | `Reset: ON` | Controls the loop by conditionally resetting 1-4 |
+| 1-3 Documents | `Reset: OFF` | Analysis phase, don't auto-reset |
+| 4_IMPLEMENT.md | `Reset: ON` | Maestro auto-resets each loop iteration |
+| 5_PROGRESS.md | `Reset: ON` | Maestro auto-resets each loop iteration |
+| 6_GATE.md | `Reset: OFF` | Loop gate + finalization — only non-reset doc in the loop |
 
-**The key insight**: Document 5 is the **progress gate**. It checks if work remains and resets documents 1-4 to continue, or leaves them alone to exit.
+**The key insight**: Document 6 is the **loop gate**. It reads the plan file and checks if PENDING items remain. Maestro continues looping as long as any non-reset document has unchecked tasks. When the gate task is checked (all done), the loop exits.
 
 ### Exit Conditions
 
@@ -333,8 +336,9 @@ Use cases:
     { "filename": "1_ANALYZE", "resetOnCompletion": false },
     { "filename": "2_FIND_ISSUES", "resetOnCompletion": false },
     { "filename": "3_EVALUATE", "resetOnCompletion": false },
-    { "filename": "4_IMPLEMENT", "resetOnCompletion": false },
-    { "filename": "5_PROGRESS", "resetOnCompletion": true }
+    { "filename": "4_IMPLEMENT", "resetOnCompletion": true },
+    { "filename": "5_PROGRESS", "resetOnCompletion": true },
+    { "filename": "6_GATE", "resetOnCompletion": false }
   ],
   "loopEnabled": true,
   "maxLoops": null,
@@ -342,7 +346,7 @@ Use cases:
 }
 ```
 
-**Important**: Only document 5 should have `resetOnCompletion: true`.
+**Important**: Documents 4-5 have `resetOnCompletion: true` (Maestro auto-resets them each iteration). Document 6 (the gate) has `resetOnCompletion: false` — it is the only non-reset document in the loop and drives Maestro's loop continuation check.
 
 ---
 
